@@ -23,7 +23,7 @@
 #ifndef NTRIPLIB_NTRIP_CASTER_H_
 #define NTRIPLIB_NTRIP_CASTER_H_
 
-#include <sys/epoll.h>
+//#include <sys/epoll.h>
 
 #include <string>
 #include <list>

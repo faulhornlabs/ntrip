@@ -11,18 +11,18 @@ option(NTRIP_BUILD_EXAMPLES "Build ntrip examples" OFF)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/lib)
-set(CMAKE_INCLUDE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/include)
+find_package(Boost REQUIRED COMPONENTS system)
 
 
 set(src_MAIN
-  src/ntrip_caster.cc
+  #src/ntrip_caster.cc
   src/ntrip_client.cc
-  src/ntrip_server.cc
+  #src/ntrip_server.cc
   src/ntrip_util.cc
   include/ntrip/mount_point.h
   include/ntrip/ntrip_caster.h
   include/ntrip/ntrip_server.h
+  include/ntrip/ntrip_client.h
   include/ntrip/ntrip_util.h
 )
 
@@ -32,6 +32,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
+target_link_libraries(${PROJECT_NAME} PRIVATE Boost::boost Boost::disable_autolinking)
+
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   DEBUG_POSTFIX _d

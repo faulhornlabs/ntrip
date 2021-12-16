@@ -27,6 +27,7 @@
 #include <string>
 #include <thread>  // NOLINT.
 #include <functional>
+#include <boost/asio.hpp>
 
 namespace libntrip {
 
@@ -83,6 +84,7 @@ class NtripClient {
  private:
   // Thread handler.
   void TheradHandler(void);
+  void handleRead(const boost::system::error_code& error, size_t bytes_transferred);
 
   std::atomic_bool service_is_running_;
   std::atomic_bool gga_is_update_;  // 外部更新GGA数据标志.
@@ -96,8 +98,14 @@ class NtripClient {
   std::string passwd_;
   std::string mountpoint_;
   std::string gga_buffer_;
-  int socket_fd_ = -1;
   ClientCallback callback_;
+
+  boost::asio::io_service m_io_service;
+  std::unique_ptr<boost::asio::io_service::work> m_io_work;
+  std::unique_ptr<boost::asio::ip::tcp::socket> m_socket;
+  std::array<char, 2048> m_recv_buf;
+  std::chrono::steady_clock::time_point m_start_tp;
+
 };
 
 }  // namespace libntrip

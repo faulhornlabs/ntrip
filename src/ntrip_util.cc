@@ -25,7 +25,6 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
-#include <unistd.h>
 
 #include <string>
 #include <fstream>
@@ -160,7 +159,7 @@ int Base64Decode(const char *src, char *user, char *passwd) {
 
 
 int GetSourcetable(const char *path, char *data, const int &data_len) {
-  if (access(path, F_OK) == -1) return -1;
+  //if (access(path, F_OK) == -1) return -1;
 
   std::ifstream ifs;
   ifs.open(path, std::ios::in | std::ios::binary);
