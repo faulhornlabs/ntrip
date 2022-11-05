@@ -1,35 +1,9 @@
-add_executable(ntrip_caster
-  ntrip_caster.cc
-)
-add_dependencies(ntrip_caster ntrip)
-target_link_libraries(ntrip_caster
-  ntrip
-  pthread
-)
+find_package(Boost COMPONENTS program_options)
 
-add_executable(ntrip_client
-  ntrip_client.cc
-)
-add_dependencies(ntrip_client ntrip)
-target_link_libraries(ntrip_client
-  ntrip
-  pthread
-)
+set(EXAMPLES ntrip_client)
 
-add_executable(ntrip_server
-  ntrip_server.cc
-)
-add_dependencies(ntrip_server ntrip)
-target_link_libraries(ntrip_server
-  ntrip
-  pthread
-)
 
-add_executable(ntrip_client_to_ntrip_server
-  ntrip_client_to_ntrip_server.cc
-)
-add_dependencies(ntrip_client_to_ntrip_server ntrip)
-target_link_libraries(ntrip_client_to_ntrip_server
-  ntrip
-  pthread
-)
+foreach(example IN ITEMS ${EXAMPLES})
+    add_executable(${example}_example ${example}_example.cpp)
+    target_link_libraries(${example}_example PRIVATE Boost::program_options lunar::ntrip_client spdlog::spdlog)
+endforeach()

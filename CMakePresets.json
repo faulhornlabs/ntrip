@@ -1,0 +1,49 @@
+{
+    "version": 4,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 23,
+      "patch": 0
+    },
+    "configurePresets": [
+      {
+        "name": "default",
+        "displayName": "Default Config",
+        "description": "Default build using Ninja generator",
+        "binaryDir": "${sourceDir}/build/default",
+        "cacheVariables": {
+            "BUILD_LUNAR_DEPS_LOAM": "ON",
+            "BUILD_LUNAR_LOAM_EXAMPLES": "ON",
+            "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+            "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+            "CMAKE_CONFIGURATION_TYPES":"RelWithDebInfo;Debug"
+        },
+        "toolchainFile": "$env{VCPKG_ROOT_LUNAR}/scripts/buildsystems/vcpkg.cmake"
+      },
+      {
+        "name": "default-ninja",
+        "inherits": "default",
+        "displayName": "Default Ninja build",
+        "description": "Default build using Ninja generator",
+        "binaryDir": "${sourceDir}/build/default_ninja",
+        "generator": "Ninja Multi-Config"
+      }
+    ],
+    "buildPresets": [
+      {
+        "name": "default",
+        "configurePreset": "default",
+        "configuration": "Release"
+      },
+      {
+        "name": "default-ninja-Debug",
+        "configurePreset": "default-ninja",
+        "configuration": "Debug"
+      },
+      {
+        "name": "default-ninja-RelWithDebInfo",
+        "configurePreset": "default-ninja",
+        "configuration": "RelWithDebInfo"
+      }
+    ]
+  }

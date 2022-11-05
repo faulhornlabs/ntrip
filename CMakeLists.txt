@@ -1,44 +1,50 @@
-cmake_minimum_required(VERSION 3.5)
-
-project(ntrip)
-
-set(VERSION_MAJOR 1)
-set(VERSION_MINOR 0)
-set(VERSION_PATCH 0)
-
-option(NTRIP_BUILD_EXAMPLES "Build ntrip examples" OFF)
+cmake_minimum_required(VERSION 3.10)
+project(lunar_ntrip_client)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(Boost REQUIRED COMPONENTS system)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 
-set(src_MAIN
-  #src/ntrip_caster.cc
-  src/ntrip_client.cc
-  #src/ntrip_server.cc
-  src/ntrip_util.cc
-  include/ntrip/mount_point.h
-  include/ntrip/ntrip_caster.h
-  include/ntrip/ntrip_server.h
-  include/ntrip/ntrip_client.h
-  include/ntrip/ntrip_util.h
+
+find_package(Boost REQUIRED)
+find_package(spdlog REQUIRED)
+
+
+set(PUB_HDRS
+    include/lunar/ntrip_client.h
+    include/lunar/ntrip_util.h
 )
 
-add_library(${PROJECT_NAME} ${src_MAIN})
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-target_include_directories(${PROJECT_NAME} PUBLIC 
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
+set(SRCS
+    src/ntrip_client.cpp
+    src/ntrip_util.cpp
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE Boost::boost Boost::disable_autolinking)
+
+add_library(lunar_ntrip_client ${PUB_HDRS} ${SRCS})
+add_library(lunar::ntrip_client ALIAS lunar_ntrip_client)
+target_include_directories(lunar_ntrip_client
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include/lunar_ntrip_client>
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+)
+target_link_libraries(lunar_ntrip_client
+    PUBLIC
+        Boost::boost
+    PRIVATE
+        spdlog::spdlog
+)
+
+set_target_properties(lunar_ntrip_client PROPERTIES
+    DEBUG_POSTFIX _d
+    RELWITHDEBINFO_POSTFIX _rd
+    POSITION_INDEPENDENT_CODE ON
+    FOLDER libs
+)
 
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  DEBUG_POSTFIX _d
-  RELWITHDEBINFO_POSTFIX _rd
-)
+add_subdirectory(examples)
 
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-config
   LIBRARY DESTINATION lib
@@ -52,7 +58,3 @@ install(EXPORT ${PROJECT_NAME}-config
 )
 
 install(DIRECTORY include/ntrip DESTINATION include)
-
-if (NTRIP_BUILD_EXAMPLES)
-  add_subdirectory(examples)
-endif (NTRIP_BUILD_EXAMPLES)

@@ -1,0 +1,10 @@
+ntrip_client:
+  ros__parameters:
+    rtcm_topic  : "/rtcm"
+    server_name : "37.220.132.38"
+    port        : 2101
+    user        : "lunarrobot"
+    password    : "Lunar2020"
+    mountpoint  : "SGO_PRS3.2"
+    lat         : 47.5619491
+    lon         : 19.0558993
