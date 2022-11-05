@@ -13,11 +13,16 @@ find_package(spdlog REQUIRED)
 set(PUB_HDRS
     include/lunar/ntrip_client.h
     include/lunar/ntrip_util.h
+    include/lunar/bittools.hpp
+    include/lunar/crc.h
+    include/lunar/rtcm_parser.h
 )
 
 set(SRCS
     src/ntrip_client.cpp
     src/ntrip_util.cpp
+    src/rtcm_parser.cpp
+
 )
 
 add_library(lunar_ntrip_client ${PUB_HDRS} ${SRCS})
